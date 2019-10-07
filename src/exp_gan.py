@@ -367,7 +367,7 @@ def train2(args):
     mkdirs(args.output_dir + "/samples")
     mkdirs(args.output_dir + "/images")
     mkdirs(args.output_dir + "/models")
-    train(args.n_epochs, args.bookkeeping_interval, args.training_ratio, args.batch_size, args.latent_space_dimension, args.poisson_lambda, args.input_file, args.output_dir)
+    train(args.n_epochs, args.bookkeeping_interval, args.training_ratio, args.batch_size, args.latent_space_dimension, args.poisson_lambda, args.input_file, args.output_dir, args.transpose, args.case, args.normalize)
 
                          
 def generate2(args):
