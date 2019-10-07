@@ -80,8 +80,11 @@ def load_data(input_file, transpose=False, case=False, normalize=False):
     else:
         X_case_control = X_train[:,0:0]
         x_train2 = X_train
-    min_max_scaler = MinMaxScaler()
-    X_expression_scaled = min_max_scaler.fit_transform(x_train2)
+    if normalize:
+        min_max_scaler = MinMaxScaler()
+        X_expression_scaled = min_max_scaler.fit_transform(x_train2)
+    else:
+        X_expression_scaled = x_train2    
     X_train_preprocessed = np.concatenate((X_expression_scaled, X_case_control), axis=1)
     return X_train_preprocessed
 
