@@ -385,11 +385,11 @@ if __name__ == "__main__":
     parser_train = subparsers.add_parser('train', help='train help')
     parser_train.add_argument('--input_file', required=True, help='input file')
     parser_train.add_argument('--transpose', required=False, action="store_true", help='transpose')
+    parser_train.add_argument('--case', required=False, action="store_true", help='case control column')
+    parser_train.add_argument('--normalize', required=False, action="store_true", help='normalize input to N(0,1)')
     parser_train.add_argument('--output_dir', required=True, help='output dir')
     parser_train.add_argument('--n_epochs', required=False, type=int, default=100, help='number of epochs')
     parser_train.add_argument('--batch_size', required=False, type=int, default=64, help='batch size')
-    parser_train.add_argument('--case', required=False, action="store_true", help='case control column')
-    parser_train.add_argument('--normalize', required=False, action="store_true", help='normalize input to N(0,1)')
     # The results are a little better when the dimensionality of the random vector is only 10.
     # The dimensionality has been left at 200 for consistency with other GAN implementations.
     parser_train.add_argument('--latent_space_dimension', required=False, type=int, default=200, help='latent space dimension')
