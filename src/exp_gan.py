@@ -64,7 +64,7 @@ inflate_to_size = 600
 disc_internal_size = 200
 
 
-def load_data(input_file, transpose=False, case=False):
+def load_data(input_file, transpose=False, case=False, normalize=False):
     if transpose:
         df = pd.read_csv(input_file, index_col=0, header=None).transpose()
     else:
@@ -221,9 +221,9 @@ def plotLosses(output_dir, dLosses, gLosses, epoch):
     plt.savefig(output_dir + "/images/gan_loss_epoch_" + str(epoch) + ".png")
 
     
-def train(n_epochs, bookkeeping_interval, TRAINING_RATIO, BATCH_SIZE, random_dim, lam, input_file, output_dir):
+def train(n_epochs, bookkeeping_interval, TRAINING_RATIO, BATCH_SIZE, random_dim, lam, input_file, output_dir, transpose, case, normalize):
     # First we load the expression data
-    X_train = load_data(input_file)
+    X_train = load_data(input_file, transpose, case, normalize)
     print(X_train.shape)
 
     # input dimension
@@ -389,6 +389,7 @@ if __name__ == "__main__":
     parser_train.add_argument('--n_epochs', required=False, type=int, default=100, help='number of epochs')
     parser_train.add_argument('--batch_size', required=False, type=int, default=64, help='batch size')
     parser_train.add_argument('--case', required=False, action="store_true", help='case control column')
+    parser_train.add_argument('--normalize', required=False, action="store_true", help='normalize input to N(0,1)')
     # The results are a little better when the dimensionality of the random vector is only 10.
     # The dimensionality has been left at 200 for consistency with other GAN implementations.
     parser_train.add_argument('--latent_space_dimension', required=False, type=int, default=200, help='latent space dimension')
