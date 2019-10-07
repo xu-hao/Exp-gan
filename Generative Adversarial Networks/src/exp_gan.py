@@ -64,15 +64,24 @@ inflate_to_size = 600
 disc_internal_size = 200
 
 
-def load_data(input_file):
-    df = pd.read_csv(input_file)
+def load_data(input_file, transpose=False, case=False):
+    if transpose:
+        df = pd.read_csv(input_file, index_col=0, header=None).transpose()
+    else:
+        df = pd.read_csv(input_file)
+        
     print(df.head())
     X_train = df.values
     # normalize it to the range [0, 1]
     X_train = X_train.astype(np.float32)
-    X_case_control = X_train[:,-1:]
+    if case:
+        X_case_control = X_train[:,-1:]
+        x_train2 = X_train[:,0:-1]
+    else:
+        X_case_control = X_train[:,0:0]
+        x_train2 = X_train
     min_max_scaler = MinMaxScaler()
-    X_expression_scaled = min_max_scaler.fit_transform(X_train[:,0:-1])
+    X_expression_scaled = min_max_scaler.fit_transform(x_train2)
     X_train_preprocessed = np.concatenate((X_expression_scaled, X_case_control), axis=1)
     return X_train_preprocessed
 
@@ -375,9 +384,11 @@ if __name__ == "__main__":
     subparsers = parser.add_subparsers(help='sub-command help')
     parser_train = subparsers.add_parser('train', help='train help')
     parser_train.add_argument('--input_file', required=True, help='input file')
+    parser_train.add_argument('--transpose', required=False, action="store_true", help='transpose')
     parser_train.add_argument('--output_dir', required=True, help='output dir')
     parser_train.add_argument('--n_epochs', required=False, type=int, default=100, help='number of epochs')
     parser_train.add_argument('--batch_size', required=False, type=int, default=64, help='batch size')
+    parser_train.add_argument('--case', required=False, action="store_true", help='case control column')
     # The results are a little better when the dimensionality of the random vector is only 10.
     # The dimensionality has been left at 200 for consistency with other GAN implementations.
     parser_train.add_argument('--latent_space_dimension', required=False, type=int, default=200, help='latent space dimension')
