@@ -64,7 +64,7 @@ inflate_to_size = 600
 disc_internal_size = 200
 
 
-def load_data(input_file, transpose=False, case=False, normalize=False):
+def load_data(input_file, transpose=False, case=False, scale=False):
     if transpose:
         df = pd.read_csv(input_file, index_col=0, header=None).transpose()
     else:
@@ -80,7 +80,7 @@ def load_data(input_file, transpose=False, case=False, normalize=False):
     else:
         X_case_control = X_train[:,0:0]
         x_train2 = X_train
-    if normalize:
+    if scale:
         min_max_scaler = MinMaxScaler()
         X_expression_scaled = min_max_scaler.fit_transform(x_train2)
     else:
@@ -224,9 +224,9 @@ def plotLosses(output_dir, dLosses, gLosses, epoch):
     plt.savefig(output_dir + "/images/gan_loss_epoch_" + str(epoch) + ".png")
 
     
-def train(n_epochs, bookkeeping_interval, TRAINING_RATIO, BATCH_SIZE, random_dim, lam, input_file, output_dir, transpose, case, normalize):
+def train(n_epochs, bookkeeping_interval, TRAINING_RATIO, BATCH_SIZE, random_dim, lam, input_file, output_dir, transpose, case, scale):
     # First we load the expression data
-    X_train = load_data(input_file, transpose, case, normalize)
+    X_train = load_data(input_file, transpose, case, scale)
     print(X_train.shape)
 
     # input dimension
@@ -370,7 +370,7 @@ def train2(args):
     mkdirs(args.output_dir + "/samples")
     mkdirs(args.output_dir + "/images")
     mkdirs(args.output_dir + "/models")
-    train(args.n_epochs, args.bookkeeping_interval, args.training_ratio, args.batch_size, args.latent_space_dimension, args.poisson_lambda, args.input_file, args.output_dir, args.transpose, args.case, args.normalize)
+    train(args.n_epochs, args.bookkeeping_interval, args.training_ratio, args.batch_size, args.latent_space_dimension, args.poisson_lambda, args.input_file, args.output_dir, args.transpose, args.case, args.scale)
 
                          
 def generate2(args):
@@ -389,7 +389,7 @@ if __name__ == "__main__":
     parser_train.add_argument('--input_file', required=True, help='input file')
     parser_train.add_argument('--transpose', required=False, action="store_true", help='transpose')
     parser_train.add_argument('--case', required=False, action="store_true", help='case control column')
-    parser_train.add_argument('--normalize', required=False, action="store_true", help='normalize input to N(0,1)')
+    parser_train.add_argument('--scale', required=False, action="store_true", help='scale input')
     parser_train.add_argument('--output_dir', required=True, help='output dir')
     parser_train.add_argument('--n_epochs', required=False, type=int, default=100, help='number of epochs')
     parser_train.add_argument('--batch_size', required=False, type=int, default=64, help='batch size')
