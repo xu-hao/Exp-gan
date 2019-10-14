@@ -404,8 +404,8 @@ if __name__ == "__main__":
 
     parser_generate = subparsers.add_parser("generate", help="generate help")
     parser_generate.add_argument("--model_file", required=True, help="model file")
-    parser_train.add_argument('--latent_space_dimension', required=False, type=int, default=200, help='latent space dimension')
-    parser_train.add_argument('--poisson_lambda', required=False, type=float, default=1, help='the lambda parameter of the poisson distribution for generating noise for latent space')
+    parser_generate.add_argument('--latent_space_dimension', required=False, type=int, default=200, help='latent space dimension')
+    parser_generate.add_argument('--poisson_lambda', required=False, type=float, default=1, help='the lambda parameter of the poisson distribution for generating noise for latent space')
     parser_generate.add_argument("--n_samples", required=True, help="number of synthetics samples to be generated", type=int)
     parser_generate.add_argument('--output_file', required=True, help='output file')
     parser_generate.set_defaults(func=generate2)
